@@ -1,37 +1,32 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 import { Menu, Search } from "lucide-react";
-import TrackItem from "./components/TrackItem";
-import useSearch from "./repository/search/use-search";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import TrackItem from "./components/TrackItem";
+import useSearch from "./repository/search/use-search";
+import useEvent from "./usecase/use-event";
 
 export default function Home() {
-  const [keyword, setKeywords] = useState("");
-  const [showModal, setShowModal] = useState(false);
-
-  const route = useRouter();
-
   const searchParams = useSearchParams()!;
   const search = searchParams.get("search") ?? "";
 
-  const handleOnSearch = (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setShowModal(false);
-    route.push(`/home?search=${keyword}`);
-  };
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeywords(e.target.value);
-  };
-
   const { data, loading } = useSearch({ variables: { term: search } });
+
+  const {
+    keyword,
+    showModal,
+    handleOnChange,
+    handleOnSearch,
+    handleOnShowModal,
+  } = useEvent();
 
   return (
     <main className="min-h-screen flex flex-col items-center pb-4 bg-gray-50">
@@ -50,13 +45,13 @@ export default function Home() {
           />
         </div>
         <Dialog open={showModal}>
-          <DialogTrigger onClick={() => setShowModal(true)}>
+          <DialogTrigger onClick={() => handleOnShowModal(true)}>
             <Search color="#ffffff" className="cursor-pointer" />
           </DialogTrigger>
-          <DialogContent onClose={() => setShowModal(false)}>
-            <span className="text-xl text-white text-center font-semibold">
+          <DialogContent onClose={() => handleOnShowModal(false)}>
+            <div className="text-xl text-white text-center font-semibold m-auto mb-6">
               Search
-            </span>
+            </div>
             <form
               className="flex flex-col gap-3 w-full"
               onSubmit={handleOnSearch}
