@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 import "./globals.css";
 import { Providers } from "./providers";
+import { Suspense } from "react";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers>{children}</Providers>
+        <Suspense>
+          <Providers>{children}</Providers>
+        </Suspense>
       </body>
     </html>
   );
