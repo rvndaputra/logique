@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useDebounceValue } from "usehooks-ts";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Home() {
-  const [keyword, setKeywords] = useState("");
+  const [keyword, setKeywords] = useDebounceValue("", 500);
   const route = useRouter();
 
   const handleOnSearch = (e: React.ChangeEvent<HTMLFormElement>) => {

@@ -1,9 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { useDebounceValue } from "usehooks-ts";
 
 const useEvent = () => {
-  const [keyword, setKeywords] = useState("");
+  const [keyword, setKeywords] = useDebounceValue("", 500);
   const [showModal, setShowModal] = useState(false);
 
   const route = useRouter();
@@ -12,9 +13,12 @@ const useEvent = () => {
     setShowModal(isOpen);
   };
 
-  const _onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeywords(e.target.value);
-  }, []);
+  const _onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setKeywords(e.target.value);
+    },
+    [setKeywords]
+  );
 
   const _onSearch = useCallback(
     (e: React.ChangeEvent<HTMLFormElement>) => {
