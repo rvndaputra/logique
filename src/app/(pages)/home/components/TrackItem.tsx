@@ -68,7 +68,7 @@ const TrackItem = (props: Props) => {
             </p>
           </div>
           <div className="flex justify-between mt-2">
-            <Badge className="!bg-green-600">Pop</Badge>
+            <Badge className="!bg-green-600">{track.primaryGenreName}</Badge>
             {track.trackPrice && (
               <div className="flex items-center gap-2">
                 <div>
